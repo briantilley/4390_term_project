@@ -3,27 +3,27 @@ Term Project for the pseudo-Chromecast assignment
 
 HOST TYPES:
 
-
 	controller - "cast" text files to the player
 
-	displayer - "play" text files character-by-character from the server as commanded
+	displayer - "play" text files
 
-	server - host/stream text files to the displayer
+	server - serve text files for casting
+
 
 Controller:
 
-	queries server for file index
 
-	sends cast commands to displayer, including file(s) to display
-
-	UI: play, pause, forward page, forward file, back page, back file
-
-		send UI commands to displayer
 
 
 Server:
 
+	accept/respond w/ index
+
+	accept/return for file requests
+
+		err. 404 for nonexistent file
 
 
 Displayer:
 
+	accept & display characters in a loop until 'end-of-cast' is received
