@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
 
 from mininet.topo import Topo
 from mininet.net import Mininet
@@ -19,9 +19,9 @@ def startCast():
     displayer = net.get('h2')
     server = net.get('h3')
 
-    temp = server.cmd('xterm')
-    temp = displayer.cmd('xterm')
-    temp = controller.cmd('xterm')
+    temp = server.cmd('xterm -hold -e ./server.py -i %s &' % server.IP())
+    temp = displayer.cmd('xterm -hold -e ./display.py -i %s &' % displayer.IP())
+    temp = controller.cmd('xterm -hold -e ./controller.py -i %s &' % server.IP())
 
     CLI(net)
 
