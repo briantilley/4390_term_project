@@ -1,4 +1,4 @@
-#!usr/bin/python
+#!/usr/bin/env python3
 
 from mininet.topo import Topo
 from mininet.net import Mininet
@@ -9,10 +9,10 @@ from mininet.node import OVSController
 from mininet.log import setLogLevel
 
 def startCast():
-    
+
     #Create a single switch network with 3 hosts
     net = Mininet(SingleSwitchTopo(k=3))
-    
+
     net.start()
 
     controller = net.get('h1')
@@ -24,7 +24,7 @@ def startCast():
     temp = controller.cmd('xterm')
 
     CLI(net)
-    
+
     #Terminate network
     net.stop()
 
