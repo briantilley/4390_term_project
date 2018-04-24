@@ -55,11 +55,13 @@ def display():
 				sys.stdout.flush()
 
 	# exit cleanly
-	except Exception:
+	except Exception as ex:
 		if connection is not None:
 			connection.close()
 		if l_sock is not None:
 			l_sock.close()
+
+		raise ex
 
 if __name__ == "__main__":
 	display()
