@@ -21,7 +21,7 @@ def startCast():
 
     temp = server.cmd('xterm -hold -e ./server.py -i %s &' % server.IP())
     temp = displayer.cmd('xterm -hold -e ./display.py -i %s &' % displayer.IP())
-    temp = controller.cmd('xterm -hold -e ./controller.py -i %s &' % server.IP())
+    temp = controller.cmd('xterm -hold -e ./controller.py -i %s --iface_display %s &' % (server.IP(), displayer.IP()))
 
     CLI(net)
 

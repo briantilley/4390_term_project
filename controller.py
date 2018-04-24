@@ -9,6 +9,7 @@
 # from mininet.log import setLogLevel
 import optparse
 import socket
+import time
 
 # return a list guaranteed not to have empty strings at the end
 def trim_empty_strings(str_list):
@@ -59,21 +60,50 @@ def get_index(sock):
      # turn into a list
      return trim_empty_strings(index_str.split("\n"))
 
+# Defining a "page" as 8 consecutive lines of text, send a page
+# prepended with enough whitespace to clear the console.
+def send_page(source_text, page_num, display_socket):
+
+     # extract a single page
+     page = ""
+     lines_seen = 0
+     for c in source_file:
+          if lines_seen >= page_num * 8:
+               page += c
+
+          if c == '\n':
+               lines_seen += 1
+
+          if lines_seen >= (page_num + 1) * 8:
+               break
+
+     # trailing newline
+     if page[-1] == '\n':
+          page = page[:-1]
+
+     # prepend whitespace
+     message = '\n' * 100 + page
+
+     # send
+     display_socket.send(message)
+
 def controller():
 
      parser = optparse.OptionParser()
-     parser.add_option("-i", dest="ip", default="127.0.0.1")
+     parser.add_option("-i", dest="ip", type="str", default="127.0.0.1")
+     parser.add_option("--iface_display", dest="ip_display", type="str", default="127.0.0.1")
      parser.add_option("-p", dest="port", type="int", default="12345")
      # parser.add_option("-m", dest="msg")
      (options, args) = parser.parse_args()
 
      s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+     time.sleep(1)
      s.connect((options.ip, options.port))
 
      print("\n")
      print("----------Welcome to TextCast-----------\n")
      print("Would you like to list the text files?\n")
-     answer = input("Enter Yes(Y) or No (N)")
+     answer = input("Enter Yes(Y) or No (N)\n")
 
      temp=True
 
