@@ -1,3 +1,0 @@
-This is a test file
-for the server to offer to the client
-who will then "play" it to the display.

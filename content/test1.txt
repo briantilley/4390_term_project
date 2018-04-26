@@ -1,3 +1,0 @@
-Well hey, here's another. Gotta have more than one test file.
-
-This one has also has multiple lines.
