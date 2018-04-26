@@ -1,15 +1,11 @@
 #!/usr/bin/env python3
 
-# from mininet.topo import Topo
-# from mininet.net import Mininet
-# from mininet.util import dumpNodeConnections
-# from mininet.topo import SingleSwitchTopo
-# from mininet.cli import CLI
-# from mininet.node import OVSController
-# from mininet.log import setLogLevel
 import optparse
 import socket
 import time
+
+# custom module to play a file in a thread
+from fileplay import play, pause, resume, stop
 
 # return a list guaranteed not to have empty strings at the end
 def trim_empty_strings(str_list):
@@ -89,16 +85,23 @@ def send_page(source_text, page_num, display_socket):
 
 def controller():
 
+     # command line options passed in by startCast.py
      parser = optparse.OptionParser()
      parser.add_option("-i", dest="ip", type="str", default="127.0.0.1")
      parser.add_option("--iface_display", dest="ip_display", type="str", default="127.0.0.1")
      parser.add_option("-p", dest="port", type="int", default="12345")
-     # parser.add_option("-m", dest="msg")
      (options, args) = parser.parse_args()
 
-     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+     # create TCP sockets to talk to other hosts
+     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+     display_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+     # wait for other hosts to come online
      time.sleep(1)
-     s.connect((options.ip, options.port))
+
+     # connect to other hosts
+     server_socket.connect((options.ip, options.port))
+     display_socket.connect((options.ip_display, options.port))
 
      print("\n")
      print("----------Welcome to TextCast-----------\n")
@@ -111,8 +114,29 @@ def controller():
           if answer.lower()=="n" or answer.lower()=="no":
                break
           elif answer.lower()=="y" or answer.lower()=="yes":
-               index = get_index(s)
-               print(index)
+               # index = get_index(server_socket)
+               # print(index)
+
+               example_file_str = None
+               with open("content/bohemian_rhapsody.txt") as f:
+                    example_file_str = f.read()
+
+               play(example_file_str, display_socket)
+
+               keep_going = True
+               while keep_going:
+
+                    cmd = input("(p)ause, (r)esume, (s)top: ")[0].lower()
+                    if 'p' == cmd:
+                         pause()
+                    elif 'r' == cmd:
+                         resume()
+                    elif 's' == cmd:
+                         stop()
+                         keep_going = False
+                    else:
+                         print("wot")
+
                break
 
 
