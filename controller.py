@@ -117,6 +117,8 @@ def controller():
                # index = get_index(server_socket)
                # print(index)
 
+# ------------ example usage of play, pause, resume, and stop functions -----------------
+
                example_file_str = None
                with open("content/bohemian_rhapsody.txt") as f:
                     example_file_str = f.read()
@@ -136,6 +138,8 @@ def controller():
                          keep_going = False
                     else:
                          print("wot")
+
+# ---------------------------------------------------------------------------------------
 
                break
 
