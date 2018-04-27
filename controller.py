@@ -117,34 +117,32 @@ def controller():
           elif answer.lower()=="y" or answer.lower()=="yes":
                index = get_index(server_socket)
                print(*index, sep = "\n")
-			   
-			   desiredFiles = raw_input("Which files would you like to view?\nEnter files as comma separated list").split(",")
+               desiredFiles = raw_input("Which files would you like to view?\nEnter files as comma separated list").split(",")
 			   
                example_file_str = None
-			   for file in desiredFiles:
-					try:
-                         with open(desiredFiles, "r") as f:
-                              example_file_str = f.read()			  
-                              play(example_file_str, display_socket)
-				    except IOError as err:
-					     print("Cannot open ", desiredFiles)
-						 break
+                    for file in desiredFiles:
+                         try:
+                              with open(desiredFiles, "r") as f:
+                                   example_file_str = f.read()			  
+                                   play(example_file_str, display_socket)
+                         except IOError as err:
+                              print("Cannot open ", desiredFiles)
+                              break
 
-                    keep_going = True
-                    while keep_going:
+                         keep_going = True
+                         while keep_going:
+                              cmd = input("(p)ause, (r)esume, (s)top: ")[0].lower()
+                              if 'p' == cmd:
+                                   pause()
+                              elif 'r' == cmd:
+                                   resume()
+                              elif 's' == cmd:
+                                   stop()
+                                   keep_going = False
+                              else:
+                                   print("wot")
 
-                         cmd = input("(p)ause, (r)esume, (s)top: ")[0].lower()
-                         if 'p' == cmd:
-                              pause()
-                         elif 'r' == cmd:
-                              resume()
-                         elif 's' == cmd:
-                              stop()
-                              keep_going = False
-                         else:
-                              print("wot")
-
-                    break
+                         break
 
           else:
                print("\nWrong Input!\n")
