@@ -3,6 +3,7 @@
 import optparse
 import socket
 import time
+import sys
 
 # custom module to play a file in a thread
 from fileplay import play, pause, resume, stop
@@ -114,43 +115,41 @@ def controller():
           if answer.lower()=="n" or answer.lower()=="no":
                break
           elif answer.lower()=="y" or answer.lower()=="yes":
-               # index = get_index(server_socket)
-               # print(index)
-
-# ------------ example usage of play, pause, resume, and stop functions -----------------
-
+               index = get_index(server_socket)
+               print(*index, sep = "\n")
+			   
+			   desiredFiles = raw_input("Which files would you like to view?\nEnter files as comma separated list").split(",")
+			   
                example_file_str = None
-               with open("content/bohemian_rhapsody.txt") as f:
-                    example_file_str = f.read()
+			   for file in desiredFiles:
+					try:
+                         with open(desiredFiles, "r") as f:
+                              example_file_str = f.read()			  
+                              play(example_file_str, display_socket)
+				    except IOError as err:
+					     print("Cannot open ", desiredFiles)
+						 break
 
-               play(example_file_str, display_socket)
+                    keep_going = True
+                    while keep_going:
 
-               keep_going = True
-               while keep_going:
+                         cmd = input("(p)ause, (r)esume, (s)top: ")[0].lower()
+                         if 'p' == cmd:
+                              pause()
+                         elif 'r' == cmd:
+                              resume()
+                         elif 's' == cmd:
+                              stop()
+                              keep_going = False
+                         else:
+                              print("wot")
 
-                    cmd = input("(p)ause, (r)esume, (s)top: ")[0].lower()
-                    if 'p' == cmd:
-                         pause()
-                    elif 'r' == cmd:
-                         resume()
-                    elif 's' == cmd:
-                         stop()
-                         keep_going = False
-                    else:
-                         print("wot")
-
-# ---------------------------------------------------------------------------------------
-
-               break
-
-
-
+                    break
 
           else:
                print("\nWrong Input!\n")
                print("Would you like to list the text files?\n")
                answer = input("Enter Yes(Y) or No (N)")
-
 
 
 if __name__ == "__main__":
