@@ -114,20 +114,17 @@ def controller():
           if answer.lower()=="n" or answer.lower()=="no":
                break
           elif answer.lower()=="y" or answer.lower()=="yes":
-               #index = get_index(server_socket)
-               index = [1, 2, 3, 4]
-               for x in range(len(index)):
-                    print(x)
-               desiredFiles = raw_input("Which files would you like to view?\nEnter files as comma separated list").split(",")
+               index = get_index(server_socket)
+               desiredFiles = input("Which files would you like to view?\nEnter files as comma separated list ").split(",")
 			   
                example_file_str = None
                for file in desiredFiles:
                     try:
-                         with open(desiredFiles, "r") as f:
+                         with open(file, "r") as f:
                               example_file_str = f.read()			  
                               play(example_file_str, display_socket)
                     except IOError as err:
-                         print("Cannot open ", desiredFiles)
+                         print("Cannot open ", file)
                          break
 
                     keep_going = True
