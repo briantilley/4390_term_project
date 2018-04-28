@@ -45,7 +45,7 @@ def get_index(sock):
           len_eor = len("END OF REPLY")
 
           # debug
-          #print("<received \"%s\">" % (response.decode("utf-8")))
+          print("<received \"%s\">" % (response.decode("utf-8")))
 
           # check for end of reply
           if index_str[-len_eor:] == "END OF REPLY":
@@ -138,7 +138,7 @@ def controller():
                          len_eor = len("END OF REPLY")
 
                          # debug
-                         print("<received \"%s\">" % (fromServer.decode("utf-8")))
+                         #print("<received \"%s\">" % (fromServer.decode("utf-8")))
 
                          # check for end of reply
                          if msgReply[-len_eor:] == "END OF REPLY":
