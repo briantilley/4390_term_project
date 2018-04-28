@@ -162,7 +162,11 @@ def controller():
           elif answer.lower()=="y" or answer.lower()=="yes":
                index = get_index(server_socket)
 
-               desiredFiles = input("\nWhich files would you like to view?\nEnter files as comma separated list\n").split(",")
+               print("Available Files:")
+               for n in index:
+                    print(n + "\t", end='')
+
+               desiredFiles = input("\n\nWhich files would you like to view?\nEnter files as comma separated list\n").split(",")
 
                for file in desiredFiles:
                     message = file.strip() + " REQUEST FILE"
