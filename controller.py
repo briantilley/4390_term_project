@@ -96,6 +96,7 @@ def UI_play_continuous(file_string, display_socket):
                resume()
           elif 's' == cmd:
                stop()
+               break
 
 def UI_play_by_page(file_string, server_socket):
      pass
