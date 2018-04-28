@@ -169,7 +169,6 @@ def controller():
                     else:
                          print("Sorry, that's not an option.")
 
-
           else:
                print("\nWrong Input!\n")
 
