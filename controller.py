@@ -44,8 +44,8 @@ def get_index(sock):
           # look for "end of reply" tag in the case of a long index
           len_eor = len("END OF REPLY")
 
-          # debug
-          print("<received \"%s\">" % (response.decode("utf-8")))
+          # # debug
+          # print("<received \"%s\">" % (response.decode("utf-8")))
 
           # check for end of reply
           if index_str[-len_eor:] == "END OF REPLY":
@@ -187,7 +187,8 @@ def controller():
                               break
 
                     # ask for desired way to play file
-                    print("\nWould you like to play continuously or view page-by-page?")
+                    print("\nCurrent file: " + file)
+                    print("Would you like to play continuously or view page-by-page?")
                     answer = input("Enter Continuous (C) or Page-by-page (P): ").lower()[0]
 
                     if answer == 'c':
