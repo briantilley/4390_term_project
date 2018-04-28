@@ -107,26 +107,26 @@ def controller():
      print("\n")
      print("----------Welcome to TextCast-----------\n")
      print("Would you like to list the text files?\n")
-     answer = input("Enter Yes(Y) or No (N)\n")
+     answer = input("Enter Yes(Y) or No (N)")
+     print("")
 
      temp=True
+
      while temp == True:
           if answer.lower()=="n" or answer.lower()=="no":
                break
           elif answer.lower()=="y" or answer.lower()=="yes":
                index = get_index(server_socket)
-               desiredFiles = input("Which files would you like to view?\nEnter files as comma separated list ").split(",")
-			   
-               example_file_str = None
-               for file in desiredFiles:
-                    try:
-                         with open(file, "r") as f:
-                              example_file_str = f.read()			  
-                              play(example_file_str, display_socket)
-                    except IOError as err:
-                         print("Cannot open ", file)
-                         break
 
+               desiredFiles = input("\nWhich files would you like to view?\nEnter files as comma separated list\n").split(",")
+			   
+               for file in desiredFiles:
+                    message = file.strip() + " REQUEST FILE"
+                    msgRequest = message.encode("utf-8")
+                    server_socket.send(msgRequest)
+                    fromServer = server_socket.recv(1024)
+                    msgReply = fromServer.decode("utf-8")
+                    
                     keep_going = True
                     while keep_going:
                          cmd = input("(p)ause, (r)esume, (s)top: ")[0].lower()
@@ -143,8 +143,10 @@ def controller():
 
           else:
                print("\nWrong Input!\n")
-               print("Would you like to list the text files?\n")
-               answer = input("Enter Yes(Y) or No (N)")
+               
+          print("\nWould you like to list the text files?\n")
+          answer = input("Enter Yes(Y) or No (N)")
+          
 
 if __name__ == "__main__":
      controller()
