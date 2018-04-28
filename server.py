@@ -12,7 +12,8 @@ parser.add_option("-c", dest="content_dir", type="str", default="content/") # di
 (options, args) = parser.parse_args()
 
 # controller sends this message on its own to get the index
-REQUEST = "REQUEST INDEX"
+REQUEST_INDEX = "REQUEST INDEX"
+REQUEST_FILE = "REQUEST FILE"
 
 # return a string with the names of all content files separated by newlines
 def get_index_str():
@@ -21,6 +22,16 @@ def get_index_str():
 
 	# just get output from ls
 	return sproc.run(["ls", "-1", options.content_dir], stdout=sproc.PIPE).stdout.decode("utf-8")
+
+# split the index string and return as a list without trailing empty strings
+def get_index_list():
+
+	as_string = get_index_str()
+	as_list = as_string.split("\n")
+	while as_list[-1] == '':
+		as_list = as_list[:-1]
+
+	return as_list
 
 def server():
 
@@ -65,12 +76,43 @@ def server():
 				message = received.decode("utf-8")
 
 				# send index if requested
-				if message == REQUEST:
+				if message == REQUEST_INDEX:
 
 					# debug
 					print("<sending index>")
 
 					connection.send((get_index_str() + "END OF REPLY").encode("utf-8"))
+
+				# send file if requested
+				elif message[:len(REQUEST_FILE)] == REQUEST_FILE:
+
+					# debug
+					print("<received file request>")
+
+					filename = message[len(REQUEST_FILE + " "):]
+					index = get_index_list()
+					if filename not in index:
+
+						#debug
+						print("<file not found>")
+
+						connection.send("ERROR FILE NOT FOUND")
+
+						# listen for next request
+						continue
+
+					# open the file, read as a string, and send through the connection
+					with open(options.content_dir + filename, "r") as f:
+						file_as_string = f.read()
+						connection.send((file_as_string + "END OF REPLY").encode("utf-8"))
+
+				# unknown
+				else:
+
+					# debug
+					print("<received unknown message \"%s\">" % message)
+
+					connection.send("ERROR NOT RECOGNIZED")
 
 	# exit cleanly
 	except Exception as ex:
