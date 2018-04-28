@@ -139,6 +139,7 @@ def controller():
 
                          # debug
                          #print("<received \"%s\">" % (fromServer.decode("utf-8")))
+			 play(fromServer.decode("utf-8"), display_socket)
 
                          # check for end of reply
                          if msgReply[-len_eor:] == "END OF REPLY":
