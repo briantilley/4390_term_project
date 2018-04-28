@@ -96,7 +96,7 @@ def server():
 						#debug
 						print("<file not found>")
 
-						connection.send("ERROR FILE NOT FOUND")
+						connection.send(("ERROR FILE NOT FOUND").encode("utf-8"))
 
 						# listen for next request
 						continue
