@@ -119,7 +119,7 @@ def controller():
                index = get_index(server_socket)
 
                desiredFiles = input("\nWhich files would you like to view?\nEnter files as comma separated list\n").split(",")
-			   
+
                for file in desiredFiles:
                     message = file.strip() + " REQUEST FILE"
                     msgRequest = message.encode("utf-8")
@@ -130,8 +130,8 @@ def controller():
                          fromServer = server_socket.recv(1024)
                          if not fromServer:
                               return None
-          
-			 # decode and append for processing
+
+                         # decode and append for processing
                          msgReply += fromServer.decode("utf-8")
 
                          # look for "end of reply" tag in the case of a long index
@@ -139,13 +139,13 @@ def controller():
 
                          # debug
                          #print("<received \"%s\">" % (fromServer.decode("utf-8")))
-			 play(fromServer.decode("utf-8"), display_socket)
+                         play(fromServer.decode("utf-8"), display_socket)
 
                          # check for end of reply
                          if msgReply[-len_eor:] == "END OF REPLY":
                               msgReply = msgReply[:-len_eor]
                               break
-                    
+
                     keep_going = True
                     while keep_going:
                          cmd = input("(p)ause, (r)esume, (s)top: ")[0].lower()
@@ -162,10 +162,10 @@ def controller():
 
           else:
                print("\nWrong Input!\n")
-               
+
           print("\nWould you like to list the text files?\n")
           answer = input("Enter Yes(Y) or No (N)")
-          
+
 
 if __name__ == "__main__":
      controller()
