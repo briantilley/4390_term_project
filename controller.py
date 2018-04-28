@@ -124,8 +124,26 @@ def controller():
                     message = file.strip() + " REQUEST FILE"
                     msgRequest = message.encode("utf-8")
                     server_socket.send(msgRequest)
-                    fromServer = server_socket.recv(1024)
-                    msgReply = fromServer.decode("utf-8")
+
+                    msgReply = ""
+                    while True:
+                         fromServer = server_socket.recv(1024)
+                         if not fromServer:
+                              return None
+          
+			 # decode and append for processing
+                         msgReply += fromServer.decode("utf-8")
+
+                         # look for "end of reply" tag in the case of a long index
+                         len_eor = len("END OF REPLY")
+
+                         # debug
+                         print("<received \"%s\">" % (fromServer.decode("utf-8")))
+
+                         # check for end of reply
+                         if msgReply[-len_eor:] == "END OF REPLY":
+                              msgReply = msgReply[:-len_eor]
+                              break
                     
                     keep_going = True
                     while keep_going:
