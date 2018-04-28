@@ -84,12 +84,12 @@ def server():
 					connection.send((get_index_str() + "END OF REPLY").encode("utf-8"))
 
 				# send file if requested
-				elif message[:len(REQUEST_FILE)] == REQUEST_FILE:
+				elif message[-len(REQUEST_FILE):] == REQUEST_FILE:
 
 					# debug
 					print("<received file request>")
 
-					filename = message[len(REQUEST_FILE + " "):]
+					filename = message[:-len(REQUEST_FILE + " ")]
 					index = get_index_list()
 					if filename not in index:
 
@@ -112,7 +112,7 @@ def server():
 					# debug
 					print("<received unknown message \"%s\">" % message)
 
-					connection.send("ERROR NOT RECOGNIZED")
+					connection.send(("ERROR NOT RECOGNIZED").encode("utf-8"))
 
 	# exit cleanly
 	except Exception as ex:
