@@ -84,6 +84,22 @@ def send_page(source_text, page_num, display_socket):
      # send
      display_socket.send(message)
 
+def UI_play_continuous(file_string, display_socket):
+
+     play(file_string, display_socket)
+
+     while True:
+          cmd = input("(p)ause, (r)esume, (s)top: ")[0].lower()
+          if 'p' == cmd:
+               pause()
+          elif 'r' == cmd:
+               resume()
+          elif 's' == cmd:
+               stop()
+
+def UI_play_by_page(file_string, server_socket):
+     pass
+
 def controller():
 
      # command line options passed in by startCast.py
@@ -107,7 +123,7 @@ def controller():
      print("\n")
      print("----------Welcome to TextCast-----------\n")
      print("Would you like to list the text files?\n")
-     answer = input("Enter Yes(Y) or No (N)")
+     answer = input("Enter Yes (Y) or No (N): ")
      print("")
 
      temp=True
@@ -137,28 +153,22 @@ def controller():
                          # look for "end of reply" tag in the case of a long index
                          len_eor = len("END OF REPLY")
 
-                         # debug
-                         #print("<received \"%s\">" % (fromServer.decode("utf-8")))
-                         play(fromServer.decode("utf-8"), display_socket)
-
                          # check for end of reply
                          if msgReply[-len_eor:] == "END OF REPLY":
                               msgReply = msgReply[:-len_eor]
                               break
 
-                    keep_going = True
-                    while keep_going:
-                         cmd = input("(p)ause, (r)esume, (s)top: ")[0].lower()
-                         if 'p' == cmd:
-                              pause()
-                         elif 'r' == cmd:
-                              resume()
-                         elif 's' == cmd:
-                              stop()
-                              keep_going = False
-                         else:
-                              print("wot")
-                    break
+                    # ask for desired way to play file
+                    print("Would you like to play continuously or view page-by-page?")
+                    answer = input("Enter Continuous (C) or Page-by-page (P): ").lower()[0]
+
+                    if answer == 'c':
+                         UI_play_continuous(msgReply, display_socket)
+                    elif answer == 'p':
+                         UI_play_by_page(msgReply, display_socket)
+                    else:
+                         print("Sorry, that's not an option.")
+
 
           else:
                print("\nWrong Input!\n")
